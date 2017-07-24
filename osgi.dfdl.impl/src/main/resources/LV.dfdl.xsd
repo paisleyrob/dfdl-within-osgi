@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xmlns:dfdl="http://www.ogf.org/dfdl/dfdl-1.0/"
+  xmlns:tns="example"
+  targetNamespace="example">
+
+  <xs:annotation>
+    <xs:appinfo source="http://www.ogf.org/dfdl/">
+      <dfdl:defineFormat name="bitFieldDefaults">
+        <dfdl:format
+          alignment="1"
+          alignmentUnits="bits"
+          binaryNumberRep="binary"
+          bitOrder="mostSignificantBitFirst"
+          byteOrder="bigEndian"
+          encoding="UTF-8"
+          escapeSchemeRef=""
+          fillByte="%NUL;"
+          initiatedContent="no"
+          initiator=""
+          leadingSkip="0"
+          lengthKind="implicit"
+          lengthUnits="bits"
+          occursCountKind="implicit"
+          representation="binary"
+          separator=""
+          sequenceKind="ordered"
+          terminator=""
+          textOutputMinLength="0"
+          textPadKind="none"
+          trailingSkip="0" />
+      </dfdl:defineFormat>
+      <dfdl:format ref="tns:bitFieldDefaults" />
+    </xs:appinfo>
+  </xs:annotation>
+
+  <xs:simpleType
+    name="hexByte"
+    dfdl:lengthKind="explicit"
+    dfdl:lengthUnits="bytes">
+    <xs:restriction base="xs:hexBinary" />
+  </xs:simpleType>
+
+  <xs:complexType name="LV">
+    <xs:sequence>
+      <xs:element
+        name="Length"
+        type="xs:unsignedInt" />
+      <xs:element
+        name="Data"
+        type="tns:hexByte"
+        dfdl:length="{../Length}"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:element
+    name="LV"
+    type="tns:LV" />
+</xs:schema>

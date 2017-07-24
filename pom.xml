@@ -1,0 +1,82 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.rpaisley.example</groupId>
+  <artifactId>osgi.dfdl</artifactId>
+  <name>DFDL Embedding Problem</name>
+  <version>0.1.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+    <edu.illinois.ncsa.daffodil.version>2.0.0-rc2</edu.illinois.ncsa.daffodil.version>
+    <org.apache.felix.configadmin.version>1.8.14</org.apache.felix.configadmin.version>
+    <org.apache.felix.dependencymanager.shell.version>4.0.5</org.apache.felix.dependencymanager.shell.version>
+    <org.apache.felix.dependencymanager.version>4.4.0</org.apache.felix.dependencymanager.version>
+    <org.apache.felix.eventadmin.version>1.4.8</org.apache.felix.eventadmin.version>
+    <org.apache.felix.fileinstall.version>3.6.0</org.apache.felix.fileinstall.version>
+    <!-- Can't upgrade gogo versions to 1.0.X until dependencymanager.shell allows gogo version >= 1.0.0 -->
+    <org.apache.felix.gogo.command.version>0.16.0</org.apache.felix.gogo.command.version>
+    <org.apache.felix.gogo.runtime.version>0.16.2</org.apache.felix.gogo.runtime.version>
+    <org.apache.felix.gogo.shell.version>0.12.0</org.apache.felix.gogo.shell.version>
+    <org.apache.felix.log.version>1.0.1</org.apache.felix.log.version>
+    <org.apache.felix.main.version>5.6.2</org.apache.felix.main.version>
+    <org.apache.felix.metatype.version>1.1.2</org.apache.felix.metatype.version>
+    <org.jdom.jdom2.version>2.0.6</org.jdom.jdom2.version>
+    <org.osgi.cmpn.version>6.0.0</org.osgi.cmpn.version>
+    <org.osgi.core.version>6.0.0</org.osgi.core.version>
+    <org.osgi.service.log.version>1.3.0</org.osgi.service.log.version>
+    <junit.version>4.12</junit.version>
+  </properties>
+
+  <modules>
+    <module>osgi.dfdl.impl</module>
+    <module>runtime</module>
+  </modules>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <configuration>
+            <source>1.7</source>
+            <target>1.7</target>
+          </configuration>
+        </plugin>
+	<plugin>
+	  <groupId>org.apache.maven.plugins</groupId>
+	  <artifactId>maven-resources-plugin</artifactId>
+	  <version>3.0.2</version>
+	</plugin>
+        <plugin>
+          <groupId>org.apache.felix</groupId>
+          <artifactId>maven-bundle-plugin</artifactId>
+          <version>2.4.0</version>
+          <extensions>true</extensions>
+          <configuration>
+            <remoteOBR>isse_rd.repo</remoteOBR>
+          </configuration>
+        </plugin>
+        <plugin>
+          <artifactId>maven-install-plugin</artifactId>
+          <version>2.4</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-deploy-plugin</artifactId>
+          <version>2.8.2</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+
+  <repositories>
+    <repository>
+      <id>ncsa-sonatype-releases</id>
+      <name>NCSA Sonatype Releases</name>
+      <url>https://opensource.ncsa.illinois.edu/nexus/content/repositories/releases</url>
+    </repository>
+  </repositories>
+</project>
