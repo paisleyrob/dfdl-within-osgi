@@ -2,6 +2,9 @@ package com.rpaisley.example.osgi.dfdl.impl;
 
 import java.net.URL;
 
+import javax.xml.XMLConstants;
+import javax.xml.validation.SchemaFactory;
+
 import edu.illinois.ncsa.daffodil.japi.Compiler;
 import edu.illinois.ncsa.daffodil.japi.Daffodil;
 
@@ -12,6 +15,14 @@ public class DFDLServiceImpl implements DFDLService {
 	public DFDLServiceImpl() {
 		compiler = Daffodil.compiler();
 		compiler.setValidateDFDLSchemas(true);
+
+		try {
+			SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+			System.out.println("Lookup of schema: " + XMLConstants.W3C_XML_SCHEMA_NS_URI
+					+ " yielded factory: " + factory.getClass().getName());
+		} catch (Exception e) {
+			System.out.println("Failed to lookup schema: " + e);
+		}
 
 		lookupClass("org.apache.xerces.jaxp.validation.XMLSchemaFactory");
 
