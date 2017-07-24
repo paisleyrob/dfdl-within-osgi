@@ -1,12 +1,15 @@
 package com.rpaisley.example.osgi.dfdl.impl;
 
-import java.net.URL;
-
-import javax.xml.XMLConstants;
-import javax.xml.validation.SchemaFactory;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 import edu.illinois.ncsa.daffodil.japi.Compiler;
 import edu.illinois.ncsa.daffodil.japi.Daffodil;
+import edu.illinois.ncsa.daffodil.japi.Diagnostic;
+import edu.illinois.ncsa.daffodil.japi.ProcessorFactory;
 
 public class DFDLServiceImpl implements DFDLService {
 	private static final String SCHEMA = "/LV.dfdl.xsd";
@@ -16,40 +19,33 @@ public class DFDLServiceImpl implements DFDLService {
 		compiler = Daffodil.compiler();
 		compiler.setValidateDFDLSchemas(true);
 
-		try {
-			SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-			System.out.println("Lookup of schema: " + XMLConstants.W3C_XML_SCHEMA_NS_URI
-					+ " yielded factory: " + factory.getClass().getName());
-		} catch (Exception e) {
-			System.out.println("Failed to lookup schema: " + e);
-		}
-
-		lookupClass("org.apache.xerces.jaxp.validation.XMLSchemaFactory");
-
-		try {
-			URL url = DFDLServiceImpl.class.getResource(SCHEMA);
-			if (null != url) {
-				System.out.println("URI for resource: " + url.toURI());
-				compiler.compileSource(url.toURI());
-				System.out.println("Compiled schema");
-			}
-		} catch (Throwable t) {
-			System.out.println("Failed to compile schema: " + SCHEMA);
-			t.printStackTrace();
-		}
-	}
-
-	private void lookupClass(String name) {
-		for (ClassLoader cl : new ClassLoader[] { ClassLoader.getSystemClassLoader(),
-				this.getClass().getClassLoader() }) {
+		try (InputStream is = DFDLServiceImpl.class.getResourceAsStream(SCHEMA)) {
+			File temp = File.createTempFile("DFDLServiceImpl", "xsd");
+			temp.deleteOnExit();
+			Files.copy(is, temp.toPath(), StandardCopyOption.REPLACE_EXISTING);
 			try {
-				Class.forName(name, true, cl);
-				System.out.println(
-						"Found class: " + name + " with loader: " + cl.getClass().getName());
+				ClassLoader original = Thread.currentThread().getContextClassLoader();
+				try {
+					Thread.currentThread()
+							.setContextClassLoader(DFDLServiceImpl.class.getClassLoader());
+					ProcessorFactory pf = compiler.compileFile(temp);
+					System.out.println("Compiled schema");
+					System.out.println("Processor factory error? " + pf.isError());
+					if (pf.isError()) {
+						for (Diagnostic d : pf.getDiagnostics()) {
+							System.out.println("DIAG: " + d.getMessage());
+						}
+					}
+				} finally {
+					Thread.currentThread().setContextClassLoader(original);
+				}
 			} catch (Throwable t) {
-				System.out.println("Unable to locate class: " + name + " with loader: "
-						+ cl.getClass().getName());
+				System.out.println("Failed to compile schema: " + SCHEMA);
+				t.printStackTrace();
 			}
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
+
 	}
 }
