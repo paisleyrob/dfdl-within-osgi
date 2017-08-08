@@ -35,6 +35,7 @@
   <modules>
     <module>osgi.dfdl.impl</module>
     <module>osgi.logger.impl</module>
+    <module>osgi.thread.impl</module>
     <module>osgi.xml.impl</module>
     <module>runtime</module>
   </modules>
