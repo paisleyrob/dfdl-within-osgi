@@ -80,6 +80,11 @@
     </dependency>
     <dependency>
       <groupId>com.rpaisley.example</groupId>
+      <artifactId>osgi.logger.impl</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.rpaisley.example</groupId>
       <artifactId>osgi.xml.impl</artifactId>
       <version>${project.version}</version>
     </dependency>

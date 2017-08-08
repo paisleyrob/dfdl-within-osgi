@@ -26,6 +26,7 @@
       <outputDirectory>bundle</outputDirectory>
       <includes>
         <include>com.rpaisley.example:osgi.dfdl.impl</include>
+        <include>com.rpaisley.example:osgi.logger.impl</include>
         <include>com.rpaisley.example:osgi.xml.impl</include>
         <include>org.apache.felix:org.apache.felix.bundlerepository</include>
         <include>org.apache.felix:org.apache.felix.configadmin</include>
