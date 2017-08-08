@@ -67,6 +67,11 @@
 
   <dependencies>
     <dependency>
+	  <groupId>com.rpaisley.example</groupId>
+      <artifactId>osgi.thread.impl</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
       <groupId>edu.illinois.ncsa</groupId>
       <artifactId>daffodil-japi_2.11</artifactId>
       <version>${edu.illinois.ncsa.daffodil.version}</version>
