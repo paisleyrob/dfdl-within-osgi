@@ -11,7 +11,7 @@ import edu.illinois.ncsa.daffodil.japi.Daffodil;
 import edu.illinois.ncsa.daffodil.japi.Diagnostic;
 import edu.illinois.ncsa.daffodil.japi.ProcessorFactory;
 
-public class DFDLServiceImpl implements DFDLService {
+public class DFDLServiceImpl {
 	private static final String SCHEMA = "/LV.dfdl.xsd";
 	private final Compiler compiler;
 
