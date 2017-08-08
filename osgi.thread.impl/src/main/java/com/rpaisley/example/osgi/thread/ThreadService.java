@@ -1,12 +1,6 @@
 package com.rpaisley.example.osgi.thread;
 
-import java.util.Dictionary;
-
-import org.apache.felix.dm.Component;
-import org.osgi.service.cm.ConfigurationException;
-import org.osgi.service.cm.ManagedService;
-
-public abstract class ThreadService implements ManagedService, Runnable {
+public abstract class ThreadService implements Runnable {
 	private boolean started = false;
 	private boolean stopped = false;
 	private boolean shutdown = false;
@@ -15,8 +9,7 @@ public abstract class ThreadService implements ManagedService, Runnable {
 	protected void setup() {
 	}
 
-	public synchronized void start(@SuppressWarnings("unused") Component component)
-			throws InterruptedException {
+	public synchronized void start() throws InterruptedException {
 		thread = new Thread(null, this, this.getClass().getSimpleName());
 		thread.start();
 		while (!started) {
@@ -24,8 +17,7 @@ public abstract class ThreadService implements ManagedService, Runnable {
 		}
 	}
 
-	public synchronized void stop(@SuppressWarnings("unused") Component component)
-			throws InterruptedException {
+	public synchronized void stop() throws InterruptedException {
 		shutdown = true;
 		thread.interrupt();
 		while (!stopped) {
@@ -53,9 +45,5 @@ public abstract class ThreadService implements ManagedService, Runnable {
 				notifyAll();
 			}
 		}
-	}
-
-	@Override
-	public void updated(Dictionary<String, ?> properties) throws ConfigurationException {
 	}
 }
