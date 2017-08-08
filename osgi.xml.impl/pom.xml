@@ -61,6 +61,11 @@
       <version>${org.osgi.core.version}</version>
     </dependency>
     <dependency>
+	  <groupId>com.rpaisley.example</groupId>
+      <artifactId>osgi.thread.impl</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
       <groupId>xerces</groupId>
       <artifactId>xercesImpl</artifactId>
       <version>${xerces.version}</version>
