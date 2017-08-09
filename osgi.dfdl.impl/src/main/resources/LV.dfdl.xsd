@@ -50,7 +50,7 @@
         name="Length"
         type="xs:unsignedInt" />
       <xs:element
-        name="Data"
+        name="Value"
         type="tns:hexByte"
         dfdl:length="{../Length}" />
     </xs:sequence>

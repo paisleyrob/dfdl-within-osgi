@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<LV>
+<tns:LV xmlns:tns="example">
   <Length>5</Length>
   <Value>0011223344</Value>
-</LV>
+</tns:LV>

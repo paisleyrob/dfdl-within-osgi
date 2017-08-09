@@ -1,5 +1,6 @@
 package com.rpaisley.example.osgi.dfdl.impl;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -12,6 +13,7 @@ import java.util.Map;
 
 import org.jdom2.Document;
 import org.jdom2.input.SAXBuilder;
+import org.jdom2.output.XMLOutputter;
 import org.osgi.service.log.LogService;
 
 import com.rpaisley.example.osgi.thread.DefaultThreadService;
@@ -20,8 +22,11 @@ import edu.illinois.ncsa.daffodil.japi.Compiler;
 import edu.illinois.ncsa.daffodil.japi.Daffodil;
 import edu.illinois.ncsa.daffodil.japi.DataProcessor;
 import edu.illinois.ncsa.daffodil.japi.Diagnostic;
+import edu.illinois.ncsa.daffodil.japi.ParseResult;
 import edu.illinois.ncsa.daffodil.japi.ProcessorFactory;
 import edu.illinois.ncsa.daffodil.japi.UnparseResult;
+import edu.illinois.ncsa.daffodil.japi.infoset.JDOMInfosetInputter;
+import edu.illinois.ncsa.daffodil.japi.infoset.JDOMInfosetOutputter;
 
 public class DFDLServiceImpl extends DefaultThreadService {
 	private static final String SCHEMA = "/LV.dfdl.xsd";
@@ -78,17 +83,34 @@ public class DFDLServiceImpl extends DefaultThreadService {
 		}
 
 		try (InputStream is = DFDLServiceImpl.class.getResourceAsStream("/example.xml")) {
-			debug("Input stream: " + is);
-
-			Thread.currentThread().setContextClassLoader(ClassLoader.getSystemClassLoader());
 			SAXBuilder builder = new SAXBuilder();
 			Document doc = builder.build(is);
+			JDOMInfosetInputter infoset = new JDOMInfosetInputter(doc);
 			DataProcessor processor = processors.get(SCHEMA);
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-			UnparseResult result = processor.unparse(Channels.newChannel(baos), doc);
+			UnparseResult uResult = processor.unparse(infoset, Channels.newChannel(baos));
+			if (uResult.isError()) {
+				for (Diagnostic d : uResult.getDiagnostics()) {
+					warn(d.getMessage());
+				}
+			} else {
+				debug("BAOS: " + baos.size() + " bytes: " + baos.toString());
+			}
 
-			debug("Result: " + result);
+			ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+			JDOMInfosetOutputter outDoc = new JDOMInfosetOutputter();
+			ParseResult pResult = processor.parse(Channels.newChannel(bais), outDoc);
+			if (pResult.isError()) {
+				for (Diagnostic d : uResult.getDiagnostics()) {
+					warn(d.getMessage());
+				}
+			} else {
+				debug("outDoc: " + outDoc);
+				Document d = outDoc.getResult();
+				XMLOutputter outputter = new XMLOutputter();
+				debug(outputter.outputString(d));
+			}
 		} catch (Throwable e) {
 			debug("Failed to load example.xml", e);
 		}
