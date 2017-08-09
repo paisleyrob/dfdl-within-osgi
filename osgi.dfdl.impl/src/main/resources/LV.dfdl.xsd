@@ -17,6 +17,7 @@
           encoding="UTF-8"
           escapeSchemeRef=""
           fillByte="%NUL;"
+          ignoreCase="no"
           initiatedContent="no"
           initiator=""
           leadingSkip="0"
@@ -29,7 +30,8 @@
           terminator=""
           textOutputMinLength="0"
           textPadKind="none"
-          trailingSkip="0" />
+          trailingSkip="0"
+          truncateSpecifiedLengthString="no" />
       </dfdl:defineFormat>
       <dfdl:format ref="tns:bitFieldDefaults" />
     </xs:appinfo>
@@ -50,7 +52,7 @@
       <xs:element
         name="Data"
         type="tns:hexByte"
-        dfdl:length="{../Length}"/>
+        dfdl:length="{../Length}" />
     </xs:sequence>
   </xs:complexType>
 
